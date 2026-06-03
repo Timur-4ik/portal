@@ -4,10 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from .models import Category, Post, Response, OneTimeCode
 
-# ТЗ: Функция массовой новостной рассылки для администраторов
 @admin.action(description='Отправить новостную рассылку выбранным пользователям')
 def send_news_newsletter(modeladmin, request, queryset):
-    # queryset — это список пользователей, которых админ отметил галочками
     emails = queryset.values_list('email', flat=True)
     send_mail(
         subject='Важные новости нашего игрового сервера!',
@@ -17,13 +15,11 @@ def send_news_newsletter(modeladmin, request, queryset):
         fail_silently=False,
     )
 
-# Перерегистрируем стандартную модель User, чтобы добавить туда кнопку рассылки
 admin.site.unregister(User)
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     actions = [send_news_newsletter]
 
-# Регистрируем остальные модели
 admin.site.register(Category)
 admin.site.register(Post)
 admin.site.register(Response)
