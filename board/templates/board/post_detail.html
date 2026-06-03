@@ -11,19 +11,16 @@
     <h1>{{ post.title }}</h1>
     <p><b>Категория:</b> {{ post.category.get_name_display }} | <b>Автор:</b> {{ post.author.username }}</p>
 
-    <!-- Кнопка редактирования для автора -->
     {% if user == post.author %}
         <p><a href="{% url 'post_edit' post.pk %}" style="background-color: #ffc107; padding: 5px 10px; text-decoration: none; color: black; border-radius: 3px;">✏️ Редактировать объявление</a></p>
     {% endif %}
 
-    <!-- Фильтр safe говорит Django, что этот HTML-код из CKEditor (картинки, видео) можно безопасно отобразить -->
     <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 30px; background-color: #fafafa;">
         {{ post.text|safe }}
     </div>
 
     <hr>
 
-    <!-- ТЗ: Возможность отправлять отклики на объявления других пользователей -->
     <h3>Оставить отклик</h3>
     {% if user.is_authenticated %}
         {% if user != post.author %}
