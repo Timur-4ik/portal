@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <p><a href="{% url 'home' %}">← На главную</a></p>
+    <hr>
+
+    <h1>{{ post.title }}</h1>
+    <p><b>Категория:</b> {{ post.category.get_name_display }} | <b>Автор:</b> {{ post.author.username }}</p>
+
+    <!-- Кнопка редактирования для автора -->
+    {% if user == post.author %}
+        <p><a href="{% url 'post_edit' post.pk %}" style="background-color: #ffc107; padding: 5px 10px; text-decoration: none; color: black; border-radius: 3px;">✏️ Редактировать объявление</a></p>
+    {% endif %}
+
+    <!-- Фильтр safe говорит Django, что этот HTML-код из CKEditor (картинки, видео) можно безопасно отобразить -->
+    <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 30px; background-color: #fafafa;">
+        {{ post.text|safe }}
+    </div>
+
+    <hr>
+
+    <!-- ТЗ: Возможность отправлять отклики на объявления других пользователей -->
+    <h3>Оставить отклик</h3>
+    {% if user.is_authenticated %}
+        {% if user != post.author %}
+            <form method="post">
+                {% csrf_token %}
+                <p>
+                    <textarea name="text" rows="4" style="width: 100%; max-width: 600px;" placeholder="Введите ваш текст отклика..." required></textarea>
+                </p>
+                <button type="submit">Отправить отклик</button>
+            </form>
+        {% else %}
+            <p><i>Вы не можете оставлять отклики на собственное объявление.</i></p>
+        {% endif %}
+    {% else %}
+        <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить отклик.</p>
+    {% endif %}
+
+    <hr>
+    <h3>Всего откликов к этому объявлению: {{ responses.count }}</h3>
+    {% for resp in responses %}
+        <div style="background-color: #f1f1f1; padding: 10px; margin-bottom: 5px;">
+            <p><b>{{ resp.author.username }}</b> ({{ resp.created_at }}):</p>
+            <p>{{ resp.text }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

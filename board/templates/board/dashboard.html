@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><title>Личный кабинет</title></head>
+<body>
+    <h2>Ваш приватный кабинет с откликами</h2>
+    <p><a href="{% url 'home' %}">← На главную</a></p>
+
+    <form method="get">
+        <label for="post_filter">Фильтр по объявлениям:</label>
+        <select name="post_filter" id="post_filter" onchange="this.form.submit()">
+            <option value="">Все объявления</option>
+            {% for post in my_posts %}
+                <option value="{{ post.id }}" {% if selected_post_id == post.id|slugify %}selected{% endif %}>{{ post.title }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <hr>
+
+    <!-- Внутри dashboard.html, там где выводятся ваши посты в выпадающем списке, или можно сделать отдельный список своих постов сверху: -->
+    <h3>Ваши объявления:</h3>
+    <ul>
+        {% for post in my_posts %}
+            <li>
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                | <a href="{% url 'post_edit' post.pk %}" style="color: orange;">Редактировать</a>
+            </li>
+        {% empty %}
+            <p>Вы еще не создали ни одного объявления.</p>
+        {% endfor %}
+    </ul>
+    <hr>
+
+
+    <h3>Список откликов:</h3>
+    {% for resp in responses %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <p><b>К объявлению:</b> {{ resp.post.title }}</p>
+            <p><b>Отправитель:</b> {{ resp.author.username }}</p>
+            <p><b>Текст отклика:</b> {{ resp.text }}</p>
+            <p><b>Статус:</b> {% if resp.is_accepted %}<span style="color: green;">Принят</span>{% else %}<span style="color: orange;">В ожидании</span>{% endif %}</p>
+
+            <!-- ТЗ: Действия с откликами -->
+            {% if not resp.is_accepted %}
+                <a href="{% url 'accept_response' resp.pk %}" style="color: green; font-weight: bold;">[ Принять ]</a>
+            {% endif %}
+            <a href="{% url 'delete_response' resp.pk %}" style="color: red;">[ Удалить ]</a>
+        </div>
+    {% empty %}
+        <p>Откликов не найдено.</p>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Подтверждение почты</title></head>
+<body>
+    <h1>Подтверждение регистрации</h1>
+    <p>На вашу почту отправлен код. Введите его ниже:</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="code" placeholder="123456" required>
+        <button type="submit">Подтвердить</button>
+    </form>
+</body>
+</html>

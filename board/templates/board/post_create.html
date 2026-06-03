@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание объявления</title>
+    <!-- Обязательно подключаем скрипты CKEditor для работы WYSIWYG -->
+    {{ categories.0.post_set.first.text.field.media }}
+    <script type="text/javascript" src="/static/ckeditor/ckeditor-init.js"></script>
+    <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+</head>
+<body>
+    <p><a href="{% url 'home' %}">← На главную</a></p>
+    <h2>Создать новое объявление</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <p>
+            <label for="title"><b>Заголовок:</b></label><br>
+            <input type="text" name="title" id="title" style="width: 100%; max-width: 600px;" required>
+        </p>
+
+        <p>
+            <label for="category"><b>Категория (выберите одну):</b></label><br>
+            <select name="category" id="category" required>
+                <option value="" disabled selected>-- Выберите категорию --</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.get_name_display }}</option>
+                {% endfor %}
+            </select>
+        </p>
+
+        <p>
+            <label><b>Текст объявления (можно добавлять картинки и видео):</b></label><br>
+            <!-- Обычная textarea, которую CKEditor автоматически превратит в визуальный редактор -->
+            <textarea name="text" id="id_text" class="ckeditor" required></textarea>
+        </p>
+
+        <button type="submit" style="padding: 10px 20px; font-weight: bold;">Опубликовать</button>
+    </form>
+</body>
+</html>

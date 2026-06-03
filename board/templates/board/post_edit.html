@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование: {{ post.title }}</title>
+    <!-- Подключаем скрипты CKEditor для работы WYSIWYG -->
+    {{ categories.0.post_set.first.text.field.media }}
+    <script type="text/javascript" src="/static/ckeditor/ckeditor-init.js"></script>
+    <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+</head>
+<body>
+    <p><a href="{% url 'post_detail' post.pk %}">← Назад к объявлению</a></p>
+    <h2>Редактировать объявление</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <p>
+            <label for="title"><b>Заголовок:</b></label><br>
+            <input type="text" name="title" id="title" value="{{ post.title }}" style="width: 100%; max-width: 600px;" required>
+        </p>
+
+        <p>
+            <label for="category"><b>Категория:</b></label><br>
+            <select name="category" id="category" required>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if cat == post.category %}selected{% endif %}>
+                        {{ cat.get_name_display }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+
+        <p>
+            <label><b>Текст объявления:</b></label><br>
+            <textarea name="text" id="id_text" class="ckeditor" required>{{ post.text }}</textarea>
+        </p>
+
+        <button type="submit" style="padding: 10px 20px; font-weight: bold;">Сохранить изменения</button>
+    </form>
+</body>
+</html>
