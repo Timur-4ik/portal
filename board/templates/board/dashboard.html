@@ -16,7 +16,6 @@
     </form>
     <hr>
 
-    <!-- Внутри dashboard.html, там где выводятся ваши посты в выпадающем списке, или можно сделать отдельный список своих постов сверху: -->
     <h3>Ваши объявления:</h3>
     <ul>
         {% for post in my_posts %}
@@ -39,7 +38,6 @@
             <p><b>Текст отклика:</b> {{ resp.text }}</p>
             <p><b>Статус:</b> {% if resp.is_accepted %}<span style="color: green;">Принят</span>{% else %}<span style="color: orange;">В ожидании</span>{% endif %}</p>
 
-            <!-- ТЗ: Действия с откликами -->
             {% if not resp.is_accepted %}
                 <a href="{% url 'accept_response' resp.pk %}" style="color: green; font-weight: bold;">[ Принять ]</a>
             {% endif %}
