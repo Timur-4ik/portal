@@ -1,8 +1,7 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv # ИСПРАВЛЕНО: Правильный импорт загрузчика
+from dotenv import load_dotenv
 
-# Находим и загружаем данные из файла .env
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -84,29 +83,19 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ==============================================================================
-# БЕЗОПАСНЫЕ НАСТРОЙКИ ПОЧТЫ (ДАННЫЕ БЕРУТСЯ ИЗ ФАЙЛА .ENV)
-# ==============================================================================
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 
-# Django безопасно прочитает эти переменные из твоего локального файла .env
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# ==============================================================================
-# МАРШРУТИЗАЦИЯ И РЕДИРЕКТЫ
-# ==============================================================================
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# ==============================================================================
-# СТАТИКА И МЕДИАФАЙЛЫ
-# ==============================================================================
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
