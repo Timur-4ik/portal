@@ -8,7 +8,6 @@ from django.conf import settings
 @receiver(post_save, sender=Response)
 def send_response_emails(sender, instance, created, **kwargs):
     if created:
-        # ТЗ Событие 1: Отправка отклика -> письмо автору объявления
         send_mail(
             subject='Новый отклик на ваше объявление',
             message=f'Пользователь {instance.author.username} оставил отклик к вашему объявлению "{instance.post.title}":\n\n{instance.text}',
@@ -16,7 +15,6 @@ def send_response_emails(sender, instance, created, **kwargs):
             recipient_list=[instance.post.author.email],
         )
     else:
-        # ТЗ Событие 2: Принятие отклика -> письмо автору отклика
         if instance.is_accepted:
             send_mail(
                 subject='Ваш отклик успешно принят!',
